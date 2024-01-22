@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.dcj.R
 import com.example.mylibrary.usecase.GetChallengeRecent
+import com.google.firebase.auth.FirebaseAuth
 
 /**
  * A simple [Fragment] subclass.
@@ -14,7 +15,6 @@ import com.example.mylibrary.usecase.GetChallengeRecent
  * create an instance of this fragment.
  */
 class LoginFragment : Fragment() {
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
