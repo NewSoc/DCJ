@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "560386240175",
+    "project_id": "challengedcjc",
+    "storage_bucket": "challengedcjc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:560386240175:android:fbdc3e61e7de25ae0c2e5a",
+        "android_client_info": {
+          "package_name": "com.example.dcj"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCC1yTS0LurVaObfF5b7U4wdxz4qrpl8gI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
