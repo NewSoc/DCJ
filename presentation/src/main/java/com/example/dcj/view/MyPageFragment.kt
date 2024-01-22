@@ -41,7 +41,6 @@ class MyPageFragment : Fragment() {
 
                 // 번들에 넣자
                 val bundle = Bundle().apply{
-                    Log.d("bundle test", "${challenge.name}")
                     putString("challengeName", "${challenge.name}")
                     putString("challengeDetail", challenge.detail)
                 }
