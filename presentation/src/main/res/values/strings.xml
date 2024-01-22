@@ -2,4 +2,7 @@
     <string name="app_name">DCJ</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="before_start">시작 전인 챌린지가 없어요.</string>
+    <string name="proceeding">진행 중인 챌린지가 없어요.</string>
+    <string name="lookfor">챌린지 둘러보기</string>
 </resources>
