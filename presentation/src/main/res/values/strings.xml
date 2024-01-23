@@ -5,4 +5,5 @@
     <string name="before_start">시작 전인 챌린지가 없어요.</string>
     <string name="proceeding">진행 중인 챌린지가 없어요.</string>
     <string name="lookfor">챌린지 둘러보기</string>
+    <string name="curbtn">전체 인증현황</string>
 </resources>
