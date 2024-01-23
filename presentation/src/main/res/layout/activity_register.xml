@@ -7,46 +7,45 @@
     tools:context=".view.RegisterActivity">
 
     <EditText
-        android:id="@+id/pwd"
-        android:layout_width="300dp"
-        android:layout_height="50dp"
+        android:id="@+id/edit_txt_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
         android:ems="10"
-        android:hint="아이디를 입력해주세요"
+        android:hint="이름을 입력하세요"
         android:inputType="textEmailAddress"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/editTextTextPassword"
-        android:layout_width="wrap_content"
-        android:layout_height="48dp"
-        android:layout_marginTop="30dp"
-        android:ems="10"
-        android:hint="비밀번호를 입력"
-        android:inputType="textPassword"
-        app:layout_constraintStart_toStartOf="@+id/pwd"
-        app:layout_constraintTop_toBottomOf="@+id/pwd" />
-
-    <Button
-        android:id="@+id/button4"
+        android:id="@+id/edit_txt_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="회원가입"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPassword" />
+        android:layout_marginTop="30dp"
+        android:ems="10"
+        android:hint="이메일을 입력하세요"
+        android:inputType="text"
+        android:text="Name"
+        app:layout_constraintStart_toStartOf="@+id/edit_txt_name"
+        app:layout_constraintTop_toBottomOf="@+id/edit_txt_name" />
 
     <EditText
-        android:id="@+id/editTextText2"
+        android:id="@+id/edit_txt_pwd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:ems="10"
-        android:hint="사용자 이름"
-        android:inputType="text"
-        app:layout_constraintStart_toStartOf="@+id/editTextTextPassword"
-        app:layout_constraintTop_toBottomOf="@+id/button4" />
+        android:inputType="textPassword"
+        app:layout_constraintStart_toStartOf="@+id/edit_txt_email"
+        app:layout_constraintTop_toBottomOf="@+id/edit_txt_email" />
 
+    <Button
+        android:id="@+id/btn_register_finish"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="회원가입완료"
+        app:layout_constraintStart_toStartOf="@+id/edit_txt_pwd"
+        app:layout_constraintTop_toBottomOf="@+id/edit_txt_pwd" />
 </androidx.constraintlayout.widget.ConstraintLayout>
