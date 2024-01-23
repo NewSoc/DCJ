@@ -17,3 +17,4 @@ rootProject.name = "DCJ"
 include(":presentation")
 include(":data")
 include(":domain")
+include(":app")
