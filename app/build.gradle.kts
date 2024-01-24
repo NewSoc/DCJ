@@ -1,21 +1,17 @@
 plugins {
-    id("com.android.application")
+    id("com.android.library")
     id("org.jetbrains.kotlin.android")
-    id("com.google.gms.google-services")
 }
 
 android {
-    namespace = "com.example.dcj"
+    namespace = "com.example.app"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.dcj"
         minSdk = 24
-        targetSdk = 33
-        versionCode = 1
-        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
@@ -34,25 +30,13 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
-
-    buildFeatures{
-        viewBinding = true
-    }
-
-
 }
 
 dependencies {
 
+    implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.11.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-    implementation(project(mapOf("path" to ":domain")))
-    implementation("com.google.firebase:firebase-firestore:24.10.1")
-    implementation("com.google.firebase:firebase-database:20.3.0")
-    implementation("com.google.firebase:firebase-auth:22.3.1")
-    implementation("androidx.legacy:legacy-support-v4:1.0.0")
-    implementation("com.google.firebase:firebase-database-ktx:20.3.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")

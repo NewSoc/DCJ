@@ -25,9 +25,8 @@ class DetailFragment : Fragment() {
         arguments?.let {
             challengename = it.getString("challengeName")
             challengedetail = it.getString("challengeDetail")
-            Log.d("input test1", "${challengename}")
         }
-        Log.d("test", "여기는 되네요")
+
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -38,14 +37,9 @@ class DetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Log.d("DetailFragment", "Challenge Name: ${arguments?.getString("challengeName")}")
-        Log.d("DetailFragment", "Challenge Detail: ${arguments?.getString("challengeDetail")}")
-
-        Log.d("viewcreated test", "${arguments?.getString("challengeName", "none")}")
         arguments?.let {
             challengename = it.getString("challengeName")
             challengedetail = it.getString("challengeDetail")
-            Log.d("input test2", "${challengename}")
         }
 
 
