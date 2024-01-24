@@ -1,5 +1,7 @@
 package com.example.mylibrary.repository
 
-interface MainRepository {
+import com.example.mylibrary.model.Post
 
+interface MainRepository  {
+    suspend fun getRecentPost() :List<Post>?
 }

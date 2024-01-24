@@ -1,4 +1,10 @@
 package com.example.mylibrary.usecase
 
-class GetRecentPosts  {
+import com.example.mylibrary.repository.MainRepository
+import javax.inject.Inject
+
+class GetRecentPosts @Inject constructor(
+    private val mainRepository : MainRepository
+) {
+    suspend fun execute() = mainRepository.getRecentPost()
 }
