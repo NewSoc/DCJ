@@ -5,6 +5,7 @@ import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -42,15 +43,13 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val list1 = loadData()
+        val list1 = loadData1()
         val pagerAdapter1 = CustomPagerAdapter1(list1)
         binding.viewPager1.adapter = pagerAdapter1
 
         val list2 = loadData2()
         val pagerAdapter2 = CustomPagerAdapter2(list2)
         binding.viewPager2.adapter = pagerAdapter2
-
-
 
         val title = listOf("전체", "운동", "식습관", "생활", "정서", "취미")
 
@@ -61,10 +60,10 @@ class HomeFragment : Fragment() {
         setupAutoSlide()
     }
 
-    fun loadData() : List<Page> {
-        val pageList = mutableListOf<Page>()
+    fun loadData1() : List<Page1> {
+        val pageList = mutableListOf<Page1>()
         for(page in 1 .. 5) {
-            pageList.add(Page("content", page))
+            pageList.add(Page1("content", page))
             listSize += 1
         }
         return pageList
@@ -101,9 +100,9 @@ class HomeFragment : Fragment() {
 
 
 
-class CustomPagerAdapter1(val pageList:List<Page>) : RecyclerView.Adapter<CustomPagerAdapter1.Holder>() {
+class CustomPagerAdapter1(val pageList:List<Page1>) : RecyclerView.Adapter<CustomPagerAdapter1.Holder>() {
     class Holder(val binding: ItemViewpagerBinding) : RecyclerView.ViewHolder(binding.root){
-        fun setItem(page: Page) {
+        fun setItem(page: Page1) {
             with(binding) {
                 content.text = page.content
                 pageNum.text = "${page.pageNum}/${listSize}"
@@ -119,20 +118,45 @@ class CustomPagerAdapter1(val pageList:List<Page>) : RecyclerView.Adapter<Custom
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
         holder.setItem(pageList[position])
+        val page = pageList[position]
+
+        holder.setItem(page)
+
+        holder.itemView.setOnClickListener {
+            Log.d("클릭", "Clicked slide number: ${page.pageNum}")
+        }
+
     }
+
 }
 class CustomPagerAdapter2(val pageList:List<Page2>) : RecyclerView.Adapter<CustomPagerAdapter2.Holder>() {
     class Holder(val binding: HomeChallengeViewpagerBinding) : RecyclerView.ViewHolder(binding.root){
         fun setItem(page: Page2) {
             with(binding) {
-                company.text = page.company
-                challengeTitle.text = page.title
-                time.text = page.time
+                from1.text = page.company
+                challengeTitle1.text = page.title
+                startTime1.text = page.time
             }
         }
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         val binding = HomeChallengeViewpagerBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        binding.challenge1.setOnClickListener {
+            Log.d("챌린지클릭", "Challenge 1 clicked")
+        }
+
+        binding.challenge2.setOnClickListener {
+            Log.d("챌린지클릭", "Challenge 2 clicked")
+        }
+
+        binding.challenge3.setOnClickListener {
+            Log.d("챌린지클릭", "Challenge 3 clicked")
+        }
+
+        binding.challenge4.setOnClickListener {
+            Log.d("챌린지클릭", "Challenge 4 clicked")
+        }
+
         return Holder(binding)
     }
 
@@ -143,5 +167,5 @@ class CustomPagerAdapter2(val pageList:List<Page2>) : RecyclerView.Adapter<Custo
     }
 }
 
-data class Page(val content:String, val pageNum:Int)
+data class Page1(val content:String, val pageNum:Int)
 data class Page2(val company:String, val title:String, val time:String)
