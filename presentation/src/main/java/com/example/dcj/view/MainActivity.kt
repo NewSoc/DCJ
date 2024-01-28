@@ -2,6 +2,7 @@ package com.example.dcj.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.example.dcj.R
 import com.example.dcj.databinding.ActivityMainBinding
 import com.example.mylibrary.usecase.CheckLogin
@@ -15,6 +16,9 @@ class MainActivity : AppCompatActivity() {
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        installSplashScreen()
+
         setContentView(binding.root)
 
         setBottomNavigationView()
