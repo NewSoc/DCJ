@@ -40,28 +40,51 @@ android {
     buildFeatures{
         viewBinding = true
     }
-    kapt {
-        correctErrorTypes = true
-    }
 
 
 }
 
 dependencies {
+    //뭔진 잘 모르겟음
+    val lifecycle_version = "2.7.0"
 
+
+    // domain 참조 가능
+    implementation(project(":domain"))
+    implementation(project(":app"))
+
+    
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.11.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-    implementation(project(mapOf("path" to ":domain")))
-    implementation("com.google.firebase:firebase-firestore:24.10.1")
-    implementation("com.google.firebase:firebase-database:20.3.0")
-    implementation("com.google.firebase:firebase-auth:22.3.1")
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
-    implementation("com.google.firebase:firebase-database-ktx:20.3.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-    implementation("com.google.dagger:hilt-android:2.44")
-    kapt("com.google.dagger:hilt-android-compiler:2.44")
 
+
+    //coroutine 설정
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9")
+
+    // ViewModel
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version")
+
+
+    //firebase 설정
+    implementation("com.google.firebase:firebase-firestore:24.10.1")
+    implementation("com.google.firebase:firebase-database:20.3.0")
+    implementation("com.google.firebase:firebase-auth:22.3.1")
+    implementation("com.google.firebase:firebase-database-ktx:20.3.0")
+    
+    //dagger hilt 설정
+    implementation("com.google.dagger:hilt-android:2.48")
+    kapt("com.google.dagger:hilt-android-compiler:2.48")
+
+    //by 문법을 위한 fragment ktx
+    implementation("androidx.fragment:fragment-ktx:1.6.2")
+
+}
+
+kapt {
+    correctErrorTypes = true
 }

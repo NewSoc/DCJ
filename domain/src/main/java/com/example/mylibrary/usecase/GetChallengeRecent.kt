@@ -17,6 +17,8 @@ object GetChallengeRecent {
         val input3 = DomainChallenge("고기라면치킨", "신촌에 고기는 통큰갈비가 맛있고 라면은 사실 안좋아하며 치킨은 레허반반이다." )
         recent_challenge_list.add(input3)
 
+
+
         return recent_challenge_list
     }
 }

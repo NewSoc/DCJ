@@ -10,6 +10,7 @@ import com.example.dcj.R
 import com.example.dcj.databinding.FragmentLoginBinding
 import com.example.mylibrary.usecase.GetChallengeRecent
 import com.google.firebase.auth.FirebaseAuth
+import javax.inject.Inject
 
 /**
  * A simple [Fragment] subclass.
@@ -18,8 +19,8 @@ import com.google.firebase.auth.FirebaseAuth
  */
 class LoginFragment : Fragment() {
 
-    lateinit var binding : FragmentLoginBinding
 
+    lateinit var binding : FragmentLoginBinding
 
 
 
