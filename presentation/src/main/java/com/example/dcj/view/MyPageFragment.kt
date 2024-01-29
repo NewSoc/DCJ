@@ -1,5 +1,6 @@
 package com.example.dcj.view
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -62,13 +63,9 @@ class MyPageFragment : Fragment() {
 
 
                             // 프래그먼트 매니저와 트랜잭션을 사용하여 프래그먼트 교체
-                            val transaction = requireActivity().supportFragmentManager.beginTransaction()
-                            transaction.replace(R.id.main_container, DetailFragment().apply{
-                                arguments = bundle
-                            }) // 'fragment_container'는 교체할 뷰의 ID
-                            transaction.addToBackStack(null) // 백 스택에 추가
-                            transaction.commit()
-
+                            val intent = Intent(requireActivity(), DetailActivity::class.java)
+                            intent.putExtras(bundle) // 필요한 데이터를 번들로 전달할 수 있음
+                            startActivity(intent)
 
                         }
                     })

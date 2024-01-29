@@ -39,9 +39,8 @@ android {
 
     buildFeatures{
         viewBinding = true
+        dataBinding = true
     }
-
-
 }
 
 dependencies {
@@ -86,6 +85,8 @@ dependencies {
     //by 문법을 위한 fragment ktx
     implementation("androidx.fragment:fragment-ktx:1.6.2")
 
+    //splash 스크린을 위한 dependency 추가
+    implementation ("androidx.core:core-splashscreen:1.0.0-alpha01")
 }
 
 kapt {
