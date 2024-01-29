@@ -7,7 +7,7 @@
     tools:context=".view.RegisterChallengeActivity">
 
     <EditText
-        android:id="@+id/editTextText"
+        android:id="@+id/challenge_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
@@ -19,7 +19,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/editTextText2"
+        android:id="@+id/challenge_detail"
         android:layout_width="266dp"
         android:layout_height="310dp"
         android:layout_marginTop="40dp"
@@ -28,7 +28,7 @@
         android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextText" />
+        app:layout_constraintTop_toBottomOf="@+id/challenge_name" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/upload_btn"
@@ -47,7 +47,7 @@
         app:layout_constraintBottom_toTopOf="@+id/upload_btn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextText2"
+        app:layout_constraintTop_toBottomOf="@+id/challenge_detail"
         app:srcCompat="@drawable/haruki" />
 
     <ProgressBar

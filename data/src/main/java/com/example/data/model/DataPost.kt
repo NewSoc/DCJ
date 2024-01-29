@@ -4,7 +4,7 @@ import java.util.Date
 
 data class DataPost @JvmOverloads constructor(
     var name: String = "",
-    var id: Int = 0,
+    var id: String = "",
     var uploader: String = "",
     var detail: String = "",
     var created_at: Date? = null,

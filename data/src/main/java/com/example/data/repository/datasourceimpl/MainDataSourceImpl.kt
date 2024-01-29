@@ -32,9 +32,6 @@ class MainDataSourceImpl @Inject constructor(
 
 
 
-        val testpost : DataPost = DataPost("dohyeong", 0, "shit", "fucking hard", null, null, null)
-            recentPosts2.add(testpost)
-
 
             return recentPosts
 

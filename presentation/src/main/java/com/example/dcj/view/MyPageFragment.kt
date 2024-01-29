@@ -43,6 +43,10 @@ class MyPageFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.challengeRegister.setOnClickListener {
+            val intent = Intent(this.getActivity(), RegisterChallengeActivity::class.java)
+            startActivity(intent)
+        }
 
         mainviewmodel.recentPosts.observe(viewLifecycleOwner, Observer { recentPosts ->
             if (recentPosts.isNotEmpty()) {
