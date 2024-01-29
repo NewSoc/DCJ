@@ -61,6 +61,8 @@ dependencies {
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 
+    //splashscreen
+    implementation ("androidx.core:core-splashscreen:1.0.0-alpha01")
 
     //coroutine 설정
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9")
@@ -74,6 +76,7 @@ dependencies {
     implementation("com.google.firebase:firebase-database:20.3.0")
     implementation("com.google.firebase:firebase-auth:22.3.1")
     implementation("com.google.firebase:firebase-database-ktx:20.3.0")
+    implementation("com.google.firebase:firebase-storage:20.3.0")
     
     //dagger hilt 설정
     implementation("com.google.dagger:hilt-android:2.48")
