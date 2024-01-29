@@ -32,7 +32,7 @@ class BeforeStartFragment : Fragment() {
 
     fun loadData() : MutableList<Challenge>{
         val data:MutableList<Challenge> = mutableListOf()
-
+//fragment를 바꿨어요 qweqweqwasdzxchqwhuzxcqweasd
         for(no in 1..100){
             val title = "코끼리 ${no}"
             val challenge = Challenge(title)
