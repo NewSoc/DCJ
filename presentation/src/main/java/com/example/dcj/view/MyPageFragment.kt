@@ -1,5 +1,6 @@
 package com.example.dcj.view
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -42,6 +43,10 @@ class MyPageFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.challengeRegister.setOnClickListener {
+            val intent = Intent(this.getActivity(), RegisterChallengeActivity::class.java)
+            startActivity(intent)
+        }
 
         mainviewmodel.recentPosts.observe(viewLifecycleOwner, Observer { recentPosts ->
             if (recentPosts.isNotEmpty()) {
