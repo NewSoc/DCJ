@@ -1,6 +1,7 @@
 package com.example.data.repository.datasourceimpl
 
 import android.util.Log
+import android.widget.ImageView
 import com.example.data.model.DataPost
 import com.example.data.repository.datasource.MainDataSource
 import com.google.firebase.firestore.FirebaseFirestore
@@ -13,7 +14,7 @@ class MainDataSourceImpl @Inject constructor(
     override suspend fun getRecentPost(): MutableList<DataPost>? {
 
 
-            val recentPosts2 : MutableList<DataPost> = mutableListOf()
+
             val recentPosts : MutableList<DataPost> = mutableListOf()
         try {
             val result = firestore.collection("posts").get().await()
@@ -35,6 +36,25 @@ class MainDataSourceImpl @Inject constructor(
 
             return recentPosts
 
+    }
+
+    override suspend fun getChallengeById(id: String?): DataPost? {
+        return try {
+            val querySnapshot = firestore.collection("posts")
+                .whereEqualTo("id", id) // 'id' 필드가 인자로 받은 id와 일치하는 문서 검색
+                .get().await()
+
+            if (!querySnapshot.isEmpty) {
+                // 쿼리 결과가 비어있지 않은 경우, 첫 번째 문서를 DataPost 객체로 변환
+                querySnapshot.documents.firstOrNull()?.toObject(DataPost::class.java)
+            } else {
+                // 일치하는 문서가 없는 경우 null 반환
+                null
+            }
+        } catch (exception: Exception) {
+            Log.e("datasource", "Error getting documents: ", exception)
+            null
+        }
     }
 
 

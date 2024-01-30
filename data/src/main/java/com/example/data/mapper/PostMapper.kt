@@ -17,4 +17,18 @@ object PostMapper {
             )
         }?.toMutableList()
     }
+
+    fun postMapper(dataPost: DataPost) : Post?{
+        return dataPost?.let{
+            Post(name = it.name,
+                id = it.id,
+                uploader = it.uploader,
+                detail = it.detail,
+                created_at = it.created_at,
+                updated_at = it.updated_at,
+                imageUrl = it.imageUrl)
+        }
+    }
+
+
 }

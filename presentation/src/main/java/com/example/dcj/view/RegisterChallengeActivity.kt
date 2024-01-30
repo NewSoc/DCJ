@@ -5,23 +5,33 @@ import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isInvisible
+import androidx.lifecycle.lifecycleScope
 import com.example.dcj.R
 import com.example.dcj.databinding.ActivityRegisterChallengeBinding
 import com.example.mylibrary.model.Post
+import com.example.mylibrary.usecase.GetRecentPosts
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import java.util.Date
 import java.util.UUID
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class RegisterChallengeActivity : AppCompatActivity() {
+
+    @Inject
+    lateinit var getRecentPosts: GetRecentPosts
 
     lateinit var imageView : ImageView
     lateinit var progressBar : ProgressBar
@@ -63,6 +73,19 @@ class RegisterChallengeActivity : AppCompatActivity() {
             } ?: run {
                 // imageUri가 null인 경우
                 Toast.makeText(getApplicationContext(), "사진을 선택해주세요", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+
+
+
+        lifecycleScope.launch {
+            val mytest : MutableList<Post>? = getRecentPosts.execute()
+            Log.d("zzzz", "${mytest}")
+            if (mytest != null && mytest.isNotEmpty()) {
+                binding.testtest.setText(mytest[0].name)
+            } else {
+                // 리스트가 비어있는 경우의 처리
             }
         }
 

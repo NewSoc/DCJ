@@ -60,6 +60,7 @@ class MyPageFragment : Fragment() {
                             val bundle = Bundle().apply{
                                 putString("challengeName", "${challenge.name}")
                                 putString("challengeDetail", challenge.detail)
+                                putString("challengeId", challenge.id)
                             }
 
                             // DetailFragment에 Bundle 설정
