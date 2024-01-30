@@ -33,6 +33,4 @@ class MyPageViewModel @Inject constructor(
         }
     }
 
-
-
 }
