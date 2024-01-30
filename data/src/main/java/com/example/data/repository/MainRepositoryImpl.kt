@@ -1,5 +1,6 @@
 package com.example.data.repository
 
+import android.widget.ImageView
 import com.example.data.mapper.PostMapper
 import com.example.data.repository.datasource.MainDataSource
 import com.example.mylibrary.model.Post
@@ -13,4 +14,10 @@ class MainRepositoryImpl @Inject constructor(
     override suspend fun getRecentPost(): MutableList<Post>?  {
         return PostMapper.postReadMapper(mainDataSource.getRecentPost())
     }
+
+    override suspend fun getChallengeById(id: String?): Post? {
+       return mainDataSource.getChallengeById(id)?.let { PostMapper.postMapper(it) }
+    }
+
+
 }

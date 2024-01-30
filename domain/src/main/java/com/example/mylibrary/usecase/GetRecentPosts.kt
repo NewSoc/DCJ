@@ -8,3 +8,5 @@ class GetRecentPosts @Inject constructor(
 ) {
     suspend fun execute() = mainRepository.getRecentPost()
 }
+
+

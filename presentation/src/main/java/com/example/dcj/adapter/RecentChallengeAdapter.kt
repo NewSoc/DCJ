@@ -4,9 +4,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.dcj.databinding.RecentChallengeReccyclerBinding
 import com.example.mylibrary.model.DomainChallenge
 import com.example.mylibrary.model.Post
+import com.example.mylibrary.usecase.GetImage
 
 class RecentChallengeAdapter(val listData:MutableList<Post>,  private val listener: OnItemClickListener) : RecyclerView.Adapter<RecentChallengeAdapter.RecentChallengeViewHolder>() {
 
@@ -37,6 +39,10 @@ class RecentChallengeAdapter(val listData:MutableList<Post>,  private val listen
             with(binding){
                 challengeName.text = "${recent_challenge.name}"
                 challengeDetail.text="${recent_challenge.detail}"
+                recent_challenge.imageUrl?.let {
+                    GetImage.getImage(itemView.context,
+                        it, challengeImage)
+                }
             }
         }
 

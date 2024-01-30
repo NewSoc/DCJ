@@ -47,4 +47,12 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     implementation("com.google.dagger:hilt-android:2.48")
     kapt("com.google.dagger:hilt-android-compiler:2.48")
+
+    // firebase 로그인
+    implementation("com.google.firebase:firebase-auth:22.3.1")
+
+
+    //image 처리 glide
+    implementation ("com.github.bumptech.glide:glide:4.16.0")
+
 }
