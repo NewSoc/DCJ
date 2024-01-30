@@ -35,8 +35,11 @@ class InProgFragment : Fragment() {
         val data:MutableList<Challenge> = mutableListOf()
 
         for(no in 1..100){
-            val title = "호랑이 ${no}"
-            val challenge = Challenge(title)
+            val username = "호랑이"
+            val title = "호랑이 수면법"
+            val category = "수면 루틴"
+            val timestart = "오늘부터"
+            val challenge = Challenge(username, title, category, timestart)
             data.add(challenge)
         }
 
