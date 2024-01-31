@@ -91,7 +91,7 @@
                             android:id="@+id/imageView9"
                             android:layout_width="240dp"
                             android:layout_height="280dp"
-                            app:srcCompat="@drawable/haruki"/>
+                            app:srcCompat="@drawable/haruki" />
 
                         <ImageView
                             android:id="@+id/imageView10"
@@ -121,6 +121,28 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
 
+            <ImageView
+                android:id="@+id/favorite_image"
+                android:layout_width="69dp"
+                android:layout_height="73dp"
+                android:src="@drawable/ic_favorite_border"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/favoriteNum"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/favoriteNum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="FavNum"
+                android:textSize="24sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/button5"
+                app:layout_constraintStart_toEndOf="@+id/favorite_image"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <Button
                 android:id="@+id/button5"
                 android:layout_width="165dp"
@@ -146,3 +168,4 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
+

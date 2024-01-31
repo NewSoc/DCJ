@@ -6,11 +6,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.activity.viewModels
 import androidx.fragment.app.activityViewModels
 import com.example.dcj.R
 import com.example.dcj.databinding.ActivityDetailBinding
 import com.example.dcj.utils.FBAuth
+import com.example.dcj.view.model.ContentDTO
 import com.example.dcj.viewmodel.MyPageViewModel
 import com.example.mylibrary.model.Post
 import com.example.mylibrary.usecase.GetChallengeById
@@ -19,11 +21,13 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import com.example.dcj.viewmodel.DetailActivityViewModel
 import com.example.mylibrary.usecase.GetImage
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
+import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.ktx.Firebase
 
 
@@ -41,11 +45,27 @@ class DetailActivity : AppCompatActivity() {
     lateinit var Challenge : Post
     var bookmarkFlag : Boolean = false
 
+    //주협이 코드
+    var firestore : FirebaseFirestore? = null
+    var uid : String? = null
+    var currentContentId: String? = null
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+
+        //주협이 파일
+        firestore = FirebaseFirestore.getInstance()
+        uid = FirebaseAuth.getInstance().currentUser?.uid
+        currentContentId = intent. getStringExtra("contentId")
+
+        val favoriteImageView = findViewById<ImageView>(R.id.favorite_image)
+        favoriteImageView.setOnClickListener {
+            handleFavoriteClick(favoriteImageView)
+        }
 
 
 
@@ -101,6 +121,45 @@ class DetailActivity : AppCompatActivity() {
         }
 
     }
+
+
+    //주협이의 추가 코드
+    private fun handleFavoriteClick(favoriteImageView: ImageView) {
+        currentContentId?.let { contentId ->
+            val tsDoc = firestore?.collection("posts")?.document(contentId)
+
+            tsDoc?.let { doc ->
+                firestore?.runTransaction { transaction ->
+                    val contentDTO = transaction.get(doc).toObject(ContentDTO::class.java)
+                    contentDTO?.let { dto ->
+                        val newFavoriteCount: Int
+                        val isLiked = dto.favorites.containsKey(uid)
+
+                        if (isLiked) {
+                            newFavoriteCount = dto.favoriteCount - 1
+                            dto.favorites.remove(uid)
+                            favoriteImageView.setImageResource(R.drawable.ic_favorite_border)
+                        } else {
+                            newFavoriteCount = dto.favoriteCount + 1
+                            uid?.let { userId -> dto.favorites[userId] = true }
+                            favoriteImageView.setImageResource(R.drawable.ic_favorite)
+                        }
+
+                        dto.favoriteCount = newFavoriteCount
+                        transaction.set(doc, dto)
+                    } ?: throw com.google.firebase.firestore.FirebaseFirestoreException(
+                        "ContentDTO not found or invalid format",
+                        FirebaseFirestoreException.Code.ABORTED
+                    )
+                }?.addOnFailureListener { exception ->
+                    // 트랜잭션 실패 시 처리
+                    Log.e("DetailActivity", "Firestore transaction failed", exception)
+                }
+            }
+        }
+    }
+
+
 
     override fun onDestroy() {
         super.onDestroy()
