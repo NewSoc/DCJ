@@ -18,14 +18,25 @@ import com.example.dcj.databinding.FragmentHomeBinding
 import com.example.dcj.databinding.FragmentMyPageBinding
 import com.example.dcj.databinding.HomeChallengeViewpagerBinding
 import com.example.dcj.databinding.ItemViewpagerBinding
+import com.example.mylibrary.model.Post
+import com.example.mylibrary.usecase.GetChallenge
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 
 private var listSize = 0
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
+
+    @Inject
+    lateinit var getChallenge : GetChallenge
+
+
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
@@ -45,6 +56,16 @@ class HomeFragment : Fragment() {
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+
+       /*  김도형의 함수 db 함수 사용법
+        CoroutineScope(Dispatchers.Main).launch {
+            val exerciseChallenge : MutableList<Post>? = getChallenge.getExerciseChallenge()
+            Log.d("testtest", "${exerciseChallenge}")
+        }
+*/
+
+
         super.onViewCreated(view, savedInstanceState)
         val list1 = loadData1()
         val pagerAdapter1 = CustomPagerAdapter1(list1)
