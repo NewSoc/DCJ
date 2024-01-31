@@ -19,9 +19,12 @@ import com.example.dcj.databinding.FragmentMyPageBinding
 import com.example.dcj.databinding.HomeChallengeViewpagerBinding
 import com.example.dcj.databinding.ItemViewpagerBinding
 import com.google.android.material.tabs.TabLayoutMediator
+import dagger.hilt.android.AndroidEntryPoint
 
 
 private var listSize = 0
+
+@AndroidEntryPoint
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null

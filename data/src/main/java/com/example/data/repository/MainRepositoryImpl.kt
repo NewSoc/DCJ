@@ -15,6 +15,26 @@ class MainRepositoryImpl @Inject constructor(
         return PostMapper.postReadMapper(mainDataSource.getRecentPost())
     }
 
+    override suspend fun getExerciseChallenge(): MutableList<Post>? {
+       return PostMapper.postReadMapper(mainDataSource.getExerciseChallenge())
+    }
+
+    override suspend fun getHobbyChallenge(): MutableList<Post>? {
+       return PostMapper.postReadMapper(mainDataSource.getHobbyChallenge())
+    }
+
+    override suspend fun getEatChallenge(): MutableList<Post>? {
+       return PostMapper.postReadMapper(mainDataSource.getEatChallenge())
+    }
+
+    override suspend fun getLifestyleChallenge(): MutableList<Post>? {
+       return PostMapper.postReadMapper(mainDataSource.getLifestyleChallenge())
+    }
+
+    override suspend fun getAllChallenge(): MutableList<Post>? {
+      return  TODO("Not yet implemented")
+    }
+
     override suspend fun getChallengeById(id: String?): Post? {
        return mainDataSource.getChallengeById(id)?.let { PostMapper.postMapper(it) }
     }

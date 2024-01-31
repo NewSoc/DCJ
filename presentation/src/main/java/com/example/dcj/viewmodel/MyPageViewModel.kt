@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mylibrary.model.Post
+import com.example.mylibrary.usecase.GetChallenge
 import com.example.mylibrary.usecase.GetRecentPosts
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -13,7 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MyPageViewModel @Inject constructor(
-    private val getRecentPosts : GetRecentPosts
+    private val getChallenge : GetChallenge
 ) : ViewModel(){
 
     // (1) Livedata _recentPosts 는 결국 recentPosts 객체가 _recentPosts만 바라보고 있다는 것이다.
@@ -29,7 +30,7 @@ class MyPageViewModel @Inject constructor(
 
     private fun loadRecentPosts() {
         viewModelScope.launch {
-            _recentPosts.value = getRecentPosts.execute()
+            _recentPosts.value = getChallenge.getExerciseChallenge()
         }
     }
 
