@@ -3,7 +3,11 @@ package com.example.dcj.view
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.activity.viewModels
+import androidx.fragment.app.activityViewModels
 import com.example.dcj.R
 import com.example.dcj.databinding.ActivityDetailBinding
 import com.example.dcj.utils.FBAuth
@@ -26,9 +30,8 @@ import com.google.firebase.ktx.Firebase
 @AndroidEntryPoint
 class DetailActivity : AppCompatActivity() {
 
-    lateinit var myRef : DatabaseReference
-
     private val mainviewmodel by viewModels<DetailActivityViewModel>()
+    lateinit var myRef : DatabaseReference
 
 
     private var challengename: String? = null
@@ -36,13 +39,14 @@ class DetailActivity : AppCompatActivity() {
     private var _binding: ActivityDetailBinding? = null
     private val binding get() = _binding!!
     lateinit var Challenge : Post
-
     var bookmarkFlag : Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+
 
 
         // detail activity에 challenge가져와서 화면에 띄우기

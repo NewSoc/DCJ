@@ -1,4 +1,4 @@
-package com.example.dcj.view
+package com.example.dcj.view.certification
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
