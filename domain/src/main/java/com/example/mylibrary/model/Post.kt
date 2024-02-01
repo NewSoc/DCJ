@@ -9,5 +9,8 @@ data class Post(
     var created_at: Date? = null,
     var updated_at: Date? = null,
     var imageUrl: String? = null,
-    var comments : MutableList<review>? = mutableListOf()
+    var comments : MutableList<review>? = mutableListOf(),
+    var likeCount: Int = 0,
+    var likes : MutableMap<String, Boolean>? = HashMap(),
+    var category : String = ""
 )
