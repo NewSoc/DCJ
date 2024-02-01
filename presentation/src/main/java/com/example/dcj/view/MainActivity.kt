@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.example.dcj.R
 import com.example.dcj.databinding.ActivityMainBinding
+import com.example.dcj.view.certification.CertificationFragment
 import com.example.mylibrary.usecase.CheckLogin
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -36,7 +37,11 @@ class MainActivity : AppCompatActivity() {
                     supportFragmentManager.beginTransaction().replace(R.id.main_container, HomeFragment()).commit()
                     true
                 }
-                R.id.calenderFragment -> {
+                R.id.searchFragment -> {
+                    supportFragmentManager.beginTransaction().replace(R.id.main_container, searchFragment()).commit()
+                    true
+                }
+                R.id.certificationFragment -> {
                     supportFragmentManager.beginTransaction().replace(R.id.main_container, CertificationFragment()).commit()
                     true
                 }
