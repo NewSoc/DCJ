@@ -1,4 +1,4 @@
-package com.example.dcj.view
+package com.example.dcj.view.certification
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -41,13 +41,6 @@ class CertificationFragment : Fragment() {
                 else -> null
             }
         }.attach()
-
-        val curBtn = view.findViewById<Button>(R.id.curBtn)
-        curBtn.setOnClickListener {
-            // Create an Intent to start DetailActivity
-            val intent = Intent(activity, DetailActivity::class.java)
-            startActivity(intent)
-        }
 
         return view
     }

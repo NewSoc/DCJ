@@ -1,4 +1,4 @@
-package com.example.dcj.view
+package com.example.dcj.view.certification
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -11,7 +11,8 @@ import com.example.dcj.R
 import com.example.dcj.adapter.CertificationAdapter
 import com.example.dcj.base.Challenge
 
-class BeforeStartFragment : Fragment() {
+class InProgFragment : Fragment() {
+
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: CertificationAdapter
     override fun onCreateView(
@@ -32,10 +33,13 @@ class BeforeStartFragment : Fragment() {
 
     fun loadData() : MutableList<Challenge>{
         val data:MutableList<Challenge> = mutableListOf()
-    //fragment를 바꿨어요 qweqweqwasdzxchqwhuzxcqweasd
+
         for(no in 1..100){
-            val title = "코끼리 ${no}"
-            val challenge = Challenge(title)
+            val username = "호랑이"
+            val title = "호랑이 수면법"
+            val category = "수면 루틴"
+            val timestart = "오늘부터"
+            val challenge = Challenge(username, title, category, timestart)
             data.add(challenge)
         }
 

@@ -122,12 +122,14 @@
             app:layout_constraintStart_toStartOf="parent">
 
             <ImageView
+
                 android:id="@+id/likeImage"
                 android:layout_width="69dp"
                 android:layout_height="73dp"
                 android:src="@drawable/ic_favorite_border"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
+
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
@@ -164,9 +166,11 @@
                 android:id="@+id/bookmarkBtn"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:foregroundGravity="center_horizontal"
+
+                android:layout_marginStart="16dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/button5"
+                app:layout_constraintStart_toStartOf="parent"
+
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/bookmark_white" />
 
