@@ -5,6 +5,7 @@ import android.widget.ImageView
 import com.example.data.model.DataPost
 import com.example.data.repository.datasource.MainDataSource
 import com.example.mylibrary.model.Post
+import com.example.mylibrary.model.review
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 import java.util.Date
@@ -54,8 +55,31 @@ class MainDataSourceImpl @Inject constructor(
 
                 if (!querySnapshot.isEmpty) {
                     // 쿼리 결과가 비어있지 않은 경우, 첫 번째 문서를 DataPost 객체로 변환
-                    result = querySnapshot.documents.firstOrNull()?.toObject(DataPost::class.java)
-                    if (result != null) {
+                    val tempResult = querySnapshot.documents.firstOrNull()?.toObject(DataPost::class.java)
+
+                    if (tempResult != null) {
+                        val documentId = querySnapshot.documents.firstOrNull()?.id // 문서의 ID 얻기
+                        val commentList : MutableList<review> = mutableListOf()
+                        val commentsSnapshot = documentId?.let {
+                            firestore.collection("Challenge")
+                                .document(category)
+                                .collection("challenge")
+                                .document(it)
+                                .collection("comments")
+                                .get().await()
+                        }
+
+                        if (commentsSnapshot != null) {
+                            for (document in commentsSnapshot){
+                                val comments = document.toObject(review::class.java)
+                                commentList.add(comments)
+                            }
+                        }
+
+
+                        tempResult.comments = commentList?.toMutableList()
+                        result = tempResult
+
                         return@forEach  // 원하는 문서를 찾았으면 forEach 루프를 종료합니다.
                     }
                 }

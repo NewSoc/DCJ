@@ -24,7 +24,7 @@ class DetailActivityViewModel @Inject constructor(
     val recentPosts: LiveData<MutableList<Post>> = _recentPosts
       */
 
-     fun loadRecentPosts(id : String?) {
+     fun loadDetailPosts(id : String?) {
         viewModelScope.launch {
             _Post.value = getChallengeById.execute(id)
         }
