@@ -146,7 +146,8 @@ class RegisterChallengeActivity : AppCompatActivity() {
                     created_at = Date(),
                     updated_at = Date(),
                     imageUrl = imageUrl,
-                    category = category
+                    category = category,
+                    likeCount = 0
                 )
                 postRef.add(post)
                     .addOnSuccessListener {
