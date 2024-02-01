@@ -122,25 +122,24 @@
             app:layout_constraintStart_toStartOf="parent">
 
             <ImageView
-                android:id="@+id/favorite_image"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+
+                android:id="@+id/likeImage"
+                android:layout_width="69dp"
+                android:layout_height="73dp"
                 android:src="@drawable/ic_favorite_border"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/favoriteNum"
-                app:layout_constraintStart_toEndOf="@+id/bookmarkBtn"
+                app:layout_constraintStart_toStartOf="parent"
+
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/favoriteNum"
+                android:id="@+id/likeNum"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
                 android:text="FavNum"
                 android:textSize="24sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/button5"
-                app:layout_constraintStart_toEndOf="@+id/favorite_image"
+                app:layout_constraintStart_toEndOf="@+id/likeImage"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <Button
@@ -154,14 +153,27 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
+                android:id="@+id/share_image"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:foregroundGravity="center_horizontal"
+                android:src="@drawable/share_icon"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/likeNum"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
                 android:id="@+id/bookmarkBtn"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
+
                 android:layout_marginStart="16dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
+
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/bookmark_white" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -33,8 +33,6 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class RegisterChallengeActivity : AppCompatActivity() {
 
-    @Inject
-    lateinit var getRecentPosts: GetRecentPosts
 
     lateinit var imageView : ImageView
     lateinit var progressBar : ProgressBar
@@ -101,15 +99,6 @@ class RegisterChallengeActivity : AppCompatActivity() {
 
 
 
-        lifecycleScope.launch {
-            val mytest : MutableList<Post>? = getRecentPosts.execute()
-            Log.d("zzzz", "${mytest}")
-            if (mytest != null && mytest.isNotEmpty()) {
-                binding.testtest.setText(mytest[0].name)
-            } else {
-                // 리스트가 비어있는 경우의 처리
-            }
-        }
 
         setContentView(binding.root)
     }
@@ -156,7 +145,8 @@ class RegisterChallengeActivity : AppCompatActivity() {
                     detail = "${binding.challengeDetail.text.toString()}", // 입력값으로 대체
                     created_at = Date(),
                     updated_at = Date(),
-                    imageUrl = imageUrl
+                    imageUrl = imageUrl,
+                    category = category
                 )
                 postRef.add(post)
                     .addOnSuccessListener {
@@ -177,7 +167,8 @@ class RegisterChallengeActivity : AppCompatActivity() {
                     detail = "${binding.challengeDetail.text.toString()}", // 입력값으로 대체
                     created_at = Date(),
                     updated_at = Date(),
-                    imageUrl = imageUrl
+                    imageUrl = imageUrl,
+                    category = category
                 )
                 postRef.add(post)
                     .addOnSuccessListener {
@@ -198,7 +189,8 @@ class RegisterChallengeActivity : AppCompatActivity() {
                     detail = "${binding.challengeDetail.text.toString()}", // 입력값으로 대체
                     created_at = Date(),
                     updated_at = Date(),
-                    imageUrl = imageUrl
+                    imageUrl = imageUrl,
+                    category = category
                 )
                 postRef.add(post)
                     .addOnSuccessListener {
@@ -219,7 +211,8 @@ class RegisterChallengeActivity : AppCompatActivity() {
                     detail = "${binding.challengeDetail.text.toString()}", // 입력값으로 대체
                     created_at = Date(),
                     updated_at = Date(),
-                    imageUrl = imageUrl
+                    imageUrl = imageUrl,
+                    category = category
                 )
                 postRef.add(post)
                     .addOnSuccessListener {
@@ -240,7 +233,8 @@ class RegisterChallengeActivity : AppCompatActivity() {
                     detail = "${binding.challengeDetail.text.toString()}", // 입력값으로 대체
                     created_at = Date(),
                     updated_at = Date(),
-                    imageUrl = imageUrl
+                    imageUrl = imageUrl,
+                    category = category
                 )
                 postRef.add(post)
                     .addOnSuccessListener {

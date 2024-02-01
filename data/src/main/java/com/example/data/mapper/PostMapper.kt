@@ -15,7 +15,9 @@ object PostMapper {
                 detail = dataPost.detail,
                 created_at = dataPost.created_at,
                 updated_at = dataPost.updated_at,
-                imageUrl = dataPost.imageUrl
+                imageUrl = dataPost.imageUrl,
+                likeCount = dataPost.likeCount,
+                category = dataPost.category
             )
         }?.toMutableList()
     }
@@ -39,7 +41,9 @@ object PostMapper {
                 created_at = it.created_at,
                 updated_at = it.updated_at,
                 imageUrl = it.imageUrl,
-                comments = commentsList // 새로운 댓글 리스트를 할당합니다.
+                comments = commentsList, // 새로운 댓글 리스트를 할당합니다.
+                likeCount = dataPost.likeCount,
+                category = dataPost.category
             )
         }
     }
