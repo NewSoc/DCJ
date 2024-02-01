@@ -1,7 +1,9 @@
 package com.example.data.mapper
 
+import android.util.Log
 import com.example.data.model.DataPost
 import com.example.mylibrary.model.Post
+import com.example.mylibrary.model.review
 
 object PostMapper {
     fun postReadMapper(dataReadDataPost: MutableList<DataPost>?): MutableList<Post>? {
@@ -18,17 +20,31 @@ object PostMapper {
         }?.toMutableList()
     }
 
-    fun postMapper(dataPost: DataPost) : Post?{
-        return dataPost?.let{
-            Post(name = it.name,
+    fun postMapper(dataPost: DataPost) : Post? {
+        val commentsList = mutableListOf<review>() // 새로운 댓글 리스트를 생성합니다.
+
+        dataPost.comments?.forEach { review ->
+            Log.d("postmapper", "${review}")
+
+            val copiedReview = review.copy() // review 객체를 복사합니다.
+            commentsList.add(copiedReview) // 복사된 review를 새로운 리스트에 추가합니다.
+        }
+
+        return dataPost?.let {
+            Post(
+                name = it.name,
                 id = it.id,
                 uploader = it.uploader,
                 detail = it.detail,
                 created_at = it.created_at,
                 updated_at = it.updated_at,
-                imageUrl = it.imageUrl)
+                imageUrl = it.imageUrl,
+                comments = commentsList // 새로운 댓글 리스트를 할당합니다.
+            )
         }
     }
 
-
 }
+
+
+

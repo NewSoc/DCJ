@@ -8,5 +8,6 @@ data class Post(
     var detail: String = "",
     var created_at: Date? = null,
     var updated_at: Date? = null,
-    var imageUrl: String? = null
+    var imageUrl: String? = null,
+    var comments : MutableList<review>? = mutableListOf()
 )

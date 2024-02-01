@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="testList">
+        <item>생활</item>
+        <item>식습관</item>
+        <item>운동</item>
+        <item>정서</item>
+        <item>취미</item>
+    </string-array>
+</resources>

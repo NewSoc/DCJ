@@ -3,22 +3,15 @@ package com.example.dcj.view
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.activity.viewModels
-import androidx.fragment.app.activityViewModels
 import com.example.dcj.R
 import com.example.dcj.databinding.ActivityDetailBinding
 import com.example.dcj.utils.FBAuth
 import com.example.dcj.view.model.ContentDTO
-import com.example.dcj.viewmodel.MyPageViewModel
 import com.example.mylibrary.model.Post
-import com.example.mylibrary.usecase.GetChallengeById
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 import com.example.dcj.viewmodel.DetailActivityViewModel
 import com.example.mylibrary.usecase.GetImage
 import com.google.firebase.auth.FirebaseAuth
@@ -70,16 +63,21 @@ class DetailActivity : AppCompatActivity() {
 
 
         // detail activity에 challenge가져와서 화면에 띄우기
+
         val pageid : String? = intent.getStringExtra("challengeId")
         mainviewmodel.loadRecentPosts(pageid)
 
+
         mainviewmodel.Post.observe(this, { post ->
             with(binding) {
+                Log.d("detailactivitytest", "${post}")
                 post.imageUrl?.let { GetImage.getImage(this@DetailActivity, it, imageView8) }
                 textView3.text = post.name
                 textView6.text = post.detail
             }
         })
+
+
 
 
         //화면 북마크
