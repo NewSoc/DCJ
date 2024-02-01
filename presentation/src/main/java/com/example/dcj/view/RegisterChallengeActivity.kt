@@ -6,6 +6,9 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.Toast
@@ -38,6 +41,7 @@ class RegisterChallengeActivity : AppCompatActivity() {
     lateinit var root : FirebaseFirestore
     private var imageUri : Uri? = null
     lateinit var binding : ActivityRegisterChallengeBinding
+    lateinit var category : String
 
     private val activityResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
@@ -55,6 +59,24 @@ class RegisterChallengeActivity : AppCompatActivity() {
         imageView = binding.imageView
         progressBar = binding.progressBar
         binding.progressBar.isInvisible = true
+
+
+
+        //스피너 만들기
+
+        val testList = resources.getStringArray(R.array.testList)
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, testList)
+        binding.spinner.adapter = adapter
+
+        binding.spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+                category = parent.getItemAtPosition(position).toString()
+            }
+            override fun onNothingSelected(parent: AdapterView<*>) {
+
+            }
+        }
+
 
 
         //이미지 클릭 이벤트
@@ -122,33 +144,123 @@ class RegisterChallengeActivity : AppCompatActivity() {
     fun savePostToFirestore(imageUrl : String){
         // Firestore 참조 초기화
         val db = FirebaseFirestore.getInstance()
-        val postRef = db.collection("posts")
 
-
-            val post = Post(
-                name = "${binding.challengeName.toString()}", // 필요한 값으로 변경
-                id = generateUniqueId(), // 고유 ID 생성 함수
-                uploader = "김도형", // 현재 사용자 정보나 입력값으로 대체
-                detail = "${binding.challengeDetail.toString()}", // 입력값으로 대체
-                created_at = Date(),
-                updated_at = Date(),
-                imageUrl = imageUrl
-            )
-
-
-
-
-
-        // Firestore에 Post 객체 저장
-        postRef.add(post)
-            .addOnSuccessListener {
-                progressBar.isInvisible = true // 프로그레스바 숨기기
-                Toast.makeText(this, "게시물이 저장되었습니다.", Toast.LENGTH_SHORT).show()
+//흠... post에 넣을까말까...음...
+        when(category){
+            "생활" -> {
+                val postRef = db.collection("Challenge").document("생활").collection("challenge")
+                val post = Post(
+                    name = "${binding.challengeName.text.toString()}", // 필요한 값으로 변경
+                    id = generateUniqueId(), // 고유 ID 생성 함수
+                    uploader = "김도형", // 현재 사용자 정보나 입력값으로 대체
+                    detail = "${binding.challengeDetail.text.toString()}", // 입력값으로 대체
+                    created_at = Date(),
+                    updated_at = Date(),
+                    imageUrl = imageUrl
+                )
+                postRef.add(post)
+                    .addOnSuccessListener {
+                        progressBar.isInvisible = true // 프로그레스바 숨기기
+                        Toast.makeText(this, "게시물이 저장되었습니다.", Toast.LENGTH_SHORT).show()
+                    }
+                    .addOnFailureListener {
+                        progressBar.isInvisible = true
+                        Toast.makeText(this, "게시물 저장 실패: ${it.message}", Toast.LENGTH_SHORT).show()
+                    }
             }
-            .addOnFailureListener {
-                progressBar.isInvisible = true
-                Toast.makeText(this, "게시물 저장 실패: ${it.message}", Toast.LENGTH_SHORT).show()
+            "식습관" ->{
+                val postRef = db.collection("Challenge").document("식습관").collection("challenge")
+                val post = Post(
+                    name = "${binding.challengeName.text.toString()}", // 필요한 값으로 변경
+                    id = generateUniqueId(), // 고유 ID 생성 함수
+                    uploader = "김도형", // 현재 사용자 정보나 입력값으로 대체
+                    detail = "${binding.challengeDetail.text.toString()}", // 입력값으로 대체
+                    created_at = Date(),
+                    updated_at = Date(),
+                    imageUrl = imageUrl
+                )
+                postRef.add(post)
+                    .addOnSuccessListener {
+                        progressBar.isInvisible = true // 프로그레스바 숨기기
+                        Toast.makeText(this, "게시물이 저장되었습니다.", Toast.LENGTH_SHORT).show()
+                    }
+                    .addOnFailureListener {
+                        progressBar.isInvisible = true
+                        Toast.makeText(this, "게시물 저장 실패: ${it.message}", Toast.LENGTH_SHORT).show()
+                    }
             }
+            "운동" ->{
+                val postRef = db.collection("Challenge").document("운동").collection("challenge")
+                val post = Post(
+                    name = "${binding.challengeName.text.toString()}", // 필요한 값으로 변경
+                    id = generateUniqueId(), // 고유 ID 생성 함수
+                    uploader = "김도형", // 현재 사용자 정보나 입력값으로 대체
+                    detail = "${binding.challengeDetail.text.toString()}", // 입력값으로 대체
+                    created_at = Date(),
+                    updated_at = Date(),
+                    imageUrl = imageUrl
+                )
+                postRef.add(post)
+                    .addOnSuccessListener {
+                        progressBar.isInvisible = true // 프로그레스바 숨기기
+                        Toast.makeText(this, "게시물이 저장되었습니다.", Toast.LENGTH_SHORT).show()
+                    }
+                    .addOnFailureListener {
+                        progressBar.isInvisible = true
+                        Toast.makeText(this, "게시물 저장 실패: ${it.message}", Toast.LENGTH_SHORT).show()
+                    }
+            }
+            "정서" ->{
+                val postRef = db.collection("Challenge").document("정서").collection("challenge")
+                val post = Post(
+                    name = "${binding.challengeName.text.toString()}", // 필요한 값으로 변경
+                    id = generateUniqueId(), // 고유 ID 생성 함수
+                    uploader = "김도형", // 현재 사용자 정보나 입력값으로 대체
+                    detail = "${binding.challengeDetail.text.toString()}", // 입력값으로 대체
+                    created_at = Date(),
+                    updated_at = Date(),
+                    imageUrl = imageUrl
+                )
+                postRef.add(post)
+                    .addOnSuccessListener {
+                        progressBar.isInvisible = true // 프로그레스바 숨기기
+                        Toast.makeText(this, "게시물이 저장되었습니다.", Toast.LENGTH_SHORT).show()
+                    }
+                    .addOnFailureListener {
+                        progressBar.isInvisible = true
+                        Toast.makeText(this, "게시물 저장 실패: ${it.message}", Toast.LENGTH_SHORT).show()
+                    }
+            }
+            "취미" ->{
+                val postRef = db.collection("Challenge").document("취미").collection("challenge")
+                val post = Post(
+                    name = "${binding.challengeName.text.toString()}", // 필요한 값으로 변경
+                    id = generateUniqueId(), // 고유 ID 생성 함수
+                    uploader = "김도형", // 현재 사용자 정보나 입력값으로 대체
+                    detail = "${binding.challengeDetail.text.toString()}", // 입력값으로 대체
+                    created_at = Date(),
+                    updated_at = Date(),
+                    imageUrl = imageUrl
+                )
+                postRef.add(post)
+                    .addOnSuccessListener {
+                        progressBar.isInvisible = true // 프로그레스바 숨기기
+                        Toast.makeText(this, "게시물이 저장되었습니다.", Toast.LENGTH_SHORT).show()
+                    }
+                    .addOnFailureListener {
+                        progressBar.isInvisible = true
+                        Toast.makeText(this, "게시물 저장 실패: ${it.message}", Toast.LENGTH_SHORT).show()
+                    }
+            }
+            else -> {
+                Toast.makeText(this, "게시물 저장 실패", Toast.LENGTH_SHORT).show()
+
+            }
+        }
+
+
+
+
 
 
     }

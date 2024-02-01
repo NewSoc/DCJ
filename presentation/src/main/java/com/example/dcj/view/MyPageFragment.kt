@@ -53,17 +53,18 @@ class MyPageFragment : Fragment() {
 
         mainviewmodel.recentPosts.observe(viewLifecycleOwner, Observer { recentPosts ->
             if (recentPosts.isNotEmpty()) {
-                Log.d("mypagefragment", "not empty")
+                Log.d("mypagefragment", "${recentPosts}")
                 val customAdapter = recentPosts?.let {
                     RecentChallengeAdapter(it, object : RecentChallengeAdapter.OnItemClickListener {
                         override fun onItemClick(challenge: Post) {
-                            Log.d("mypagefragment", "${challenge.name}")
+                            Log.d("mypagefragment", "${challenge.id}")
 
                             // 번들에 넣자
                             val bundle = Bundle().apply{
                                 putString("challengeName", "${challenge.name}")
                                 putString("challengeDetail", challenge.detail)
                                 putString("challengeId", challenge.id)
+
                             }
 
                             // DetailFragment에 Bundle 설정
