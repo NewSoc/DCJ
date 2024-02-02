@@ -4,13 +4,11 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.viewModels
 import com.example.dcj.R
 import com.example.dcj.databinding.ActivityDetailBinding
 import com.example.dcj.utils.FBAuth
-import com.example.dcj.view.model.ContentDTO
 import com.example.mylibrary.model.Post
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.AndroidEntryPoint
@@ -23,13 +21,11 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
-import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 
@@ -43,17 +39,14 @@ class DetailActivity : AppCompatActivity() {
     lateinit var myRef: DatabaseReference
 
 
-    private var challengename: String? = null
-    private var challengedetail: String? = null
     private var _binding: ActivityDetailBinding? = null
     private val binding get() = _binding!!
-    lateinit var Challenge: Post
     var bookmarkFlag: Boolean = false
 
     //주협이 코드
-    var firestore: FirebaseFirestore? = null
-    var uid: String? = null
-    var currentContentId: String? = null
+    private var firestore: FirebaseFirestore? = null
+    private var uid: String? = null
+    private var currentContentId: String? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -70,7 +63,7 @@ class DetailActivity : AppCompatActivity() {
 
         if (currentContentId != null) {
             Log.d("DetailActivity", "here done")
-            setupFavoriteImageView()
+            setupLikeImageView()
         } else {
             Log.e("DetailActivity", "No content ID provided in intent")
         }
@@ -80,20 +73,17 @@ class DetailActivity : AppCompatActivity() {
         // detail activity에 challenge가져와서 화면에 띄우기
 
         val pageid : String? = intent.getStringExtra("challengeId")
-        mainviewmodel.loadRecentPosts(pageid)
+        mainviewmodel.loadDetailPosts(pageid)
 
 
 
-        mainviewmodel.Post.observe(this, { post ->
+        mainviewmodel.Post.observe(this) { post ->
             with(binding) {
-                Log.d("detailactivitytest", "${post}")
                 post.imageUrl?.let { GetImage.getImage(this@DetailActivity, it, imageView8) }
                 textView3.text = post.name
                 textView6.text = post.detail
             }
-        })
-
-
+        }
 
 
         //화면 북마크
@@ -125,7 +115,7 @@ class DetailActivity : AppCompatActivity() {
 
         _binding!!.bookmarkBtn.setOnClickListener {//북마크 버튼을 누르면 그에 따른 처리를 수행함
 
-            if(bookmarkFlag == false){
+            if(!bookmarkFlag){
                 myRef.child(pageid).child(key).setValue(true)
                     .addOnSuccessListener {
                         bookmarkFlag = true
@@ -151,42 +141,49 @@ class DetailActivity : AppCompatActivity() {
 
     //주협이의 추가 코드
 
-private fun setupFavoriteImageView() {
-    binding.likeImage.setOnClickListener {
-        if (uid == null) {
-            // 사용자가 로그인하지 않았을 경우 Toast 메시지 출력
-            Toast.makeText(this, "로그인이 필요합니다.", Toast.LENGTH_SHORT).show()
-        } else {
-            // 로그인한 사용자의 경우 좋아요 처리
-            Log.d("DetailActivity", "Log in check success")
-            currentContentId?.let { likeClick(it) }
+    private fun setupLikeImageView() {
+        // 초기 좋아요 상태와 갯수 설정
+        currentContentId?.let { postId ->
+            firestore?.collection("Challenge")
+                ?.document(post.category)
+                ?.collection("challenge")
+                ?.document(postId)
+                ?.get()
+                ?.addOnSuccessListener { documentSnapshot ->
+                    val post = documentSnapshot.toObject(Post::class.java)
+                    post?.let {
+                        val isLiked = it.likes?.containsKey(uid) ?: false
+                        if (isLiked) {
+                            binding.likeImage.setImageResource(R.drawable.ic_favorite)
+                        } else {
+                            binding.likeImage.setImageResource(R.drawable.ic_favorite_border)
+                        }
+
+                        // 좋아요 갯수 설정
+                        val likeCount = it.likeCount
+                        binding.likeNum.text = likeCount.toString()
+                    }
+                }
+                ?.addOnFailureListener { e ->
+                    Log.e("DetailActivity", "Error fetching like information", e)
+                }
+        }
+
+        // 좋아요 버튼 클릭 리스너 설정
+        binding.likeImage.setOnClickListener {
+            if (uid == null) {
+                Toast.makeText(this, "로그인이 필요합니다.", Toast.LENGTH_SHORT).show()
+            } else {
+                currentContentId?.let { postId ->
+                    likeClick(postId)
+                }
+            }
         }
     }
-
-}
-private fun setupShareImageView() {
-    binding.shareImage.setOnClickListener {
-        val intent = Intent(Intent.ACTION_SEND_MULTIPLE)
-        intent.type = "text/plain"
-
-        val blogUrl = "https://tekken5953.tistory.com/"
-        val content = "친구가 링크를 공유했어요!\n어떤 링크인지 들어가서 확인해볼까요?"
-        intent.putExtra(Intent.EXTRA_TEXT,"$content\n\n$blogUrl")
-
-        val chooserTitle = "친구에게 공유하기"
-        startActivity(Intent.createChooser(intent, chooserTitle))
-    }
-}
-
     private fun likeClick(postId: String) {
-        lateinit var post: Post
 
         CoroutineScope(Dispatchers.IO).launch {
             val post = async { getChallengeById.execute(postId) }.await()
-            Log.d("DetailActivity", "can i get this ${post}")
-            var updateLikeImage: Int? = null
-            var newLikeCount: Int? = null
-
             if (post != null) {
                 firestore?.collection("Challenge")
                     ?.document(post.category)
@@ -197,24 +194,30 @@ private fun setupShareImageView() {
                         for (document in querySnapshot.documents) {
                             val documentReference = document.reference
                             firestore?.runTransaction { transaction ->
-                                var uid = FirebaseAuth.getInstance().currentUser?.uid
-                                Log.d("1111", "${uid}")
+                                val snapshot = transaction.get(documentReference)
+                                val currentPost = snapshot.toObject(Post::class.java)
 
-                                post?.let { dto ->
-                                    Log.d("1111", "${dto.likes?.containsKey(uid)}")
-                                    if (dto.likes?.containsKey(uid) == true) {
-                                        // 좋아요가 이미 눌린 상태일 경우
-                                        dto.likeCount -= 1
-                                        dto.likes?.remove(uid)
-                                        updateLikeImage = R.drawable.ic_favorite_border
+
+                                currentPost?.let { post ->
+                                    val uid = FirebaseAuth.getInstance().currentUser?.uid
+                                    val likes = post.likes ?: hashMapOf()
+
+                                    if (likes.containsKey(uid)) {
+                                        // 좋아요 취소
+                                        post.likeCount -= 1
+                                        likes.remove(uid)
+                                        binding.likeImage.setImageResource(R.drawable.ic_favorite_border)
+                                        binding.likeNum.text = post.likeCount.toString()
                                     } else {
-                                        // 좋아요가 안 눌린 상태일 경우
-                                        dto.likeCount += 1
-                                        uid?.let { uid -> dto.likes?.set(uid!!, true) }
-                                        updateLikeImage = R.drawable.ic_favorite
+                                        // 좋아요 설정
+                                        post.likeCount += 1
+                                        uid?.let { likes[uid] = true }
+                                        binding.likeImage.setImageResource(R.drawable.ic_favorite)
+                                        binding.likeNum.text = post.likeCount.toString()
                                     }
-                                    newLikeCount = dto.likeCount
-                                    transaction.set(documentReference, dto)
+
+                                    post.likes = likes
+                                    transaction.set(documentReference, post)
                                 }
                             }?.addOnFailureListener { e ->
                                 Log.e("DetailActivity", "Error updating like", e)
@@ -222,22 +225,26 @@ private fun setupShareImageView() {
                         }
                     }
                     ?.addOnFailureListener { exception ->
-                        // 오류 처리
+                        Log.e("DetailActivity", "Firestore query failed", exception)
                     }
-            }
-
-            withContext(Dispatchers.Main) {
-                updateLikeImage?.let { binding.likeImage.setImageResource(it) }
-                newLikeCount?.let { binding.likeNum.text = it.toString() }
             }
         }
     }
+    private fun setupShareImageView() {
+        binding.shareImage.setOnClickListener {
+            val intent = Intent(Intent.ACTION_SEND_MULTIPLE)
+            intent.type = "text/plain"
 
+            val blogUrl = "https://tekken5953.tistory.com/"
+            val content = "친구가 링크를 공유했어요!\n어떤 링크인지 들어가서 확인해볼까요?"
+            intent.putExtra(Intent.EXTRA_TEXT,"$content\n\n$blogUrl")
 
-
-
-override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
+            val chooserTitle = "친구에게 공유하기"
+            startActivity(Intent.createChooser(intent, chooserTitle))
+        }
+    }
+    override fun onDestroy() {
+            super.onDestroy()
+            _binding = null
     }
 }
