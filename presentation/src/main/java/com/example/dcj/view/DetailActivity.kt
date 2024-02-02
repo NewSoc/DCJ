@@ -70,11 +70,14 @@ class DetailActivity : AppCompatActivity() {
 
 
 
-        // detail activity에 challenge가져와서 화면에 띄우기
 
+
+
+
+
+    // detail activity에 challenge가져와서 화면에 띄우기
         val pageid : String? = intent.getStringExtra("challengeId")
         mainviewmodel.loadDetailPosts(pageid)
-
 
 
         mainviewmodel.Post.observe(this) { post ->
@@ -89,21 +92,17 @@ class DetailActivity : AppCompatActivity() {
         //화면 북마크
         val database = Firebase.database
         val key = "bookmarkIsTrue" // 가져올 데이터의 특정 키 값
-        myRef = database.getReference("user").child(FBAuth.getUid())//현재 user의 uid 항목
+        myRef = database.getReference("user").child(FBAuth.getUid())
 
-
-        myRef.child(pageid!!).addListenerForSingleValueEvent(object : ValueEventListener {
+        myRef.child(key).addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                if (dataSnapshot.exists()) {//페이지 데이터가 존재하면(페이지에 접속한 적이 있으면)
-                    val userData = dataSnapshot.child(key).getValue(Boolean::class.java) // User 클래스로 데이터 매핑
-                    if (userData == true) {//북마크 데이터가 true이면 색칠해줌
+                if (dataSnapshot.exists()) {
+                    val userData = dataSnapshot.getValue(Boolean::class.java) // User 클래스로 데이터 매핑
+                    if (userData != null) {
+                        Log.d("bookmarkFlag", userData.toString())
                         bookmarkFlag = true
-                        _binding!!.bookmarkBtn.setImageResource(R.drawable.bookmark_color)
-                    } else{
-                        bookmarkFlag = false
                     }
                 } else {
-                    myRef.child(pageid).child(key).setValue(false)//현재 페이지에 처음 접속하면 pageid를 db에 추가
                     bookmarkFlag = false
                 }
             }
@@ -111,31 +110,31 @@ class DetailActivity : AppCompatActivity() {
             override fun onCancelled(databaseError: DatabaseError) {
 
             }
-        })//기존의 북마크 데이터를 불러오는 로직
+        })
 
-        _binding!!.bookmarkBtn.setOnClickListener {//북마크 버튼을 누르면 그에 따른 처리를 수행함
+        _binding!!.bookmarkBtn.setOnClickListener {
 
             if(!bookmarkFlag){
-                myRef.child(pageid).child(key).setValue(true)
-                    .addOnSuccessListener {
-                        bookmarkFlag = true
-                        _binding!!.bookmarkBtn.setImageResource(R.drawable.bookmark_color)
-                    }
-                    .addOnFailureListener{
-                        Log.e("bookmarkFlag", "Error updating database", it)
-                    }
+                if (pageid != null) {
+                    myRef.child(pageid).child(key).setValue(true)
+                        .addOnSuccessListener {
+                            bookmarkFlag = true
+                            _binding!!.bookmarkBtn.setImageResource(R.drawable.bookmark_color)
+                        }
+                        .addOnFailureListener{
+                            Log.e("bookmarkFlag", "Error updating database", it)
+                        }
+                }
+
             }
             else{
-                myRef.child(pageid).child(key).setValue(false)
-                    .addOnSuccessListener {
-                        bookmarkFlag = false
-                        _binding!!.bookmarkBtn.setImageResource(R.drawable.bookmark_white)
-                    }
-                    .addOnFailureListener{
-                        Log.e("bookmarkFlag", "Error updating database", it)
-                    }
+                _binding!!.bookmarkBtn.setImageResource(R.drawable.bookmark_white)
+                myRef.child("bookmarkIsTrue").setValue(null)
+                Log.d("bookmarkFlag", bookmarkFlag.toString())
+                bookmarkFlag = false
             }
         }
+
     }
 
 
@@ -145,7 +144,7 @@ class DetailActivity : AppCompatActivity() {
         // 초기 좋아요 상태와 갯수 설정
         currentContentId?.let { postId ->
             firestore?.collection("Challenge")
-                ?.document(post.category)
+                ?.document()
                 ?.collection("challenge")
                 ?.document(postId)
                 ?.get()
@@ -184,6 +183,7 @@ class DetailActivity : AppCompatActivity() {
 
         CoroutineScope(Dispatchers.IO).launch {
             val post = async { getChallengeById.execute(postId) }.await()
+
             if (post != null) {
                 firestore?.collection("Challenge")
                     ?.document(post.category)
@@ -194,6 +194,7 @@ class DetailActivity : AppCompatActivity() {
                         for (document in querySnapshot.documents) {
                             val documentReference = document.reference
                             firestore?.runTransaction { transaction ->
+
                                 val snapshot = transaction.get(documentReference)
                                 val currentPost = snapshot.toObject(Post::class.java)
 
@@ -208,6 +209,7 @@ class DetailActivity : AppCompatActivity() {
                                         likes.remove(uid)
                                         binding.likeImage.setImageResource(R.drawable.ic_favorite_border)
                                         binding.likeNum.text = post.likeCount.toString()
+
                                     } else {
                                         // 좋아요 설정
                                         post.likeCount += 1

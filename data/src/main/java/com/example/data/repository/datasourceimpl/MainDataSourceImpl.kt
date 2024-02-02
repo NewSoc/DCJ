@@ -111,9 +111,10 @@ class MainDataSourceImpl @Inject constructor(
 
 
 
+        val sortedChallenge : MutableList<DataPost> = Challenge.sortedByDescending { it.likeCount }.toMutableList()
 
 
-        return Challenge
+        return sortedChallenge
     }
 
     override suspend fun getHobbyChallenge(): MutableList<DataPost>? {
@@ -135,9 +136,10 @@ class MainDataSourceImpl @Inject constructor(
 
 
 
+        val sortedChallenge : MutableList<DataPost> = Challenge.sortedByDescending { it.likeCount }.toMutableList()
 
 
-        return Challenge
+        return sortedChallenge
     }
 
     override suspend fun getEatChallenge(): MutableList<DataPost>? {
@@ -159,9 +161,10 @@ class MainDataSourceImpl @Inject constructor(
 
 
 
+        val sortedChallenge : MutableList<DataPost> = Challenge.sortedByDescending { it.likeCount }.toMutableList()
 
 
-        return Challenge
+        return sortedChallenge
     }
 
     override suspend fun getLifestyleChallenge(): MutableList<DataPost>? {
@@ -185,12 +188,34 @@ class MainDataSourceImpl @Inject constructor(
 
 
 
-        return Challenge
+        val sortedChallenge : MutableList<DataPost> = Challenge.sortedByDescending { it.likeCount }.toMutableList()
+
+
+        return sortedChallenge
     }
 
     override suspend fun getAllChallenge(): MutableList<DataPost>? {
-        TODO("Not yet implemented")
+        val allChallenges: MutableList<DataPost> = mutableListOf()
+        val categories = listOf("생활", "식습관", "운동", "정서", "취미")
+
+        categories.forEach { category ->
+            try {
+                val result = firestore.collection("Challenge").document(category)
+                    .collection("challenge").get().await()
+                for (document in result) {
+                    Log.d("datasource", "${document.id} => ${document.data}")
+                    val post = document.toObject(DataPost::class.java)
+                    allChallenges.add(post)
+                }
+            } catch (exception: Exception) {
+                Log.d("datasource", "Error getting documents from category $category: ", exception)
+            }
+        }
+
+        // likeCount를 기준으로 내림차순 정렬
+        return allChallenges.sortedByDescending { it.likeCount }.toMutableList()
     }
+
 
 
 }
