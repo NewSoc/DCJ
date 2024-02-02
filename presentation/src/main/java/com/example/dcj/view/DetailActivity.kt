@@ -26,7 +26,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 
@@ -40,17 +39,14 @@ class DetailActivity : AppCompatActivity() {
     lateinit var myRef: DatabaseReference
 
 
-    private var challengename: String? = null
-    private var challengedetail: String? = null
     private var _binding: ActivityDetailBinding? = null
     private val binding get() = _binding!!
-    lateinit var Challenge: Post
     var bookmarkFlag: Boolean = false
 
     //주협이 코드
-    var firestore: FirebaseFirestore? = null
-    var uid: String? = null
-    var currentContentId: String? = null
+    private var firestore: FirebaseFirestore? = null
+    private var uid: String? = null
+    private var currentContentId: String? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,7 +63,7 @@ class DetailActivity : AppCompatActivity() {
 
         if (currentContentId != null) {
             Log.d("DetailActivity", "here done")
-            setupFavoriteImageView()
+            setupLikeImageView()
         } else {
             Log.e("DetailActivity", "No content ID provided in intent")
         }
@@ -83,16 +79,14 @@ class DetailActivity : AppCompatActivity() {
         val pageid : String? = intent.getStringExtra("challengeId")
         mainviewmodel.loadDetailPosts(pageid)
 
-        mainviewmodel.Post.observe(this, { post ->
+
+        mainviewmodel.Post.observe(this) { post ->
             with(binding) {
-                Log.d("detailactivitytest", "${post}")
                 post.imageUrl?.let { GetImage.getImage(this@DetailActivity, it, imageView8) }
                 textView3.text = post.name
                 textView6.text = post.detail
             }
-        })
-
-
+        }
 
 
         //화면 북마크
@@ -120,10 +114,18 @@ class DetailActivity : AppCompatActivity() {
 
         _binding!!.bookmarkBtn.setOnClickListener {
 
-            if(bookmarkFlag == false){
-                _binding!!.bookmarkBtn.setImageResource(R.drawable.bookmark_color)
-                myRef.child("bookmarkIsTrue").setValue(true)
-                bookmarkFlag = true
+            if(!bookmarkFlag){
+                if (pageid != null) {
+                    myRef.child(pageid).child(key).setValue(true)
+                        .addOnSuccessListener {
+                            bookmarkFlag = true
+                            _binding!!.bookmarkBtn.setImageResource(R.drawable.bookmark_color)
+                        }
+                        .addOnFailureListener{
+                            Log.e("bookmarkFlag", "Error updating database", it)
+                        }
+                }
+
             }
             else{
                 _binding!!.bookmarkBtn.setImageResource(R.drawable.bookmark_white)
@@ -138,41 +140,49 @@ class DetailActivity : AppCompatActivity() {
 
     //주협이의 추가 코드
 
-private fun setupFavoriteImageView() {
-    binding.likeImage.setOnClickListener {
-        if (uid == null) {
-            // 사용자가 로그인하지 않았을 경우 Toast 메시지 출력
-            Toast.makeText(this, "로그인이 필요합니다.", Toast.LENGTH_SHORT).show()
-        } else {
-            // 로그인한 사용자의 경우 좋아요 처리
-            Log.d("DetailActivity", "Log in check success")
-            currentContentId?.let { likeClick(it) }
+    private fun setupLikeImageView() {
+        // 초기 좋아요 상태와 갯수 설정
+        currentContentId?.let { postId ->
+            firestore?.collection("Challenge")
+                ?.document()
+                ?.collection("challenge")
+                ?.document(postId)
+                ?.get()
+                ?.addOnSuccessListener { documentSnapshot ->
+                    val post = documentSnapshot.toObject(Post::class.java)
+                    post?.let {
+                        val isLiked = it.likes?.containsKey(uid) ?: false
+                        if (isLiked) {
+                            binding.likeImage.setImageResource(R.drawable.ic_favorite)
+                        } else {
+                            binding.likeImage.setImageResource(R.drawable.ic_favorite_border)
+                        }
+
+                        // 좋아요 갯수 설정
+                        val likeCount = it.likeCount
+                        binding.likeNum.text = likeCount.toString()
+                    }
+                }
+                ?.addOnFailureListener { e ->
+                    Log.e("DetailActivity", "Error fetching like information", e)
+                }
+        }
+
+        // 좋아요 버튼 클릭 리스너 설정
+        binding.likeImage.setOnClickListener {
+            if (uid == null) {
+                Toast.makeText(this, "로그인이 필요합니다.", Toast.LENGTH_SHORT).show()
+            } else {
+                currentContentId?.let { postId ->
+                    likeClick(postId)
+                }
+            }
         }
     }
-
-}
-private fun setupShareImageView() {
-    binding.shareImage.setOnClickListener {
-        val intent = Intent(Intent.ACTION_SEND_MULTIPLE)
-        intent.type = "text/plain"
-
-        val blogUrl = "https://tekken5953.tistory.com/"
-        val content = "친구가 링크를 공유했어요!\n어떤 링크인지 들어가서 확인해볼까요?"
-        intent.putExtra(Intent.EXTRA_TEXT,"$content\n\n$blogUrl")
-
-        val chooserTitle = "친구에게 공유하기"
-        startActivity(Intent.createChooser(intent, chooserTitle))
-    }
-}
-
     private fun likeClick(postId: String) {
-        lateinit var post: Post
 
         CoroutineScope(Dispatchers.IO).launch {
             val post = async { getChallengeById.execute(postId) }.await()
-
-            var updateLikeImage: Int? = null
-            var newLikeCount: Int? = null
 
             if (post != null) {
                 firestore?.collection("Challenge")
@@ -184,22 +194,32 @@ private fun setupShareImageView() {
                         for (document in querySnapshot.documents) {
                             val documentReference = document.reference
                             firestore?.runTransaction { transaction ->
-                                var uid = FirebaseAuth.getInstance().currentUser?.uid
 
-                                post?.let { dto ->
-                                    if (dto.likes?.containsKey(uid) == true) {
-                                        // 좋아요가 이미 눌린 상태일 경우
-                                        dto.likeCount -= 1
-                                        dto.likes?.remove(uid)
-                                        updateLikeImage = R.drawable.ic_favorite_border
+                                val snapshot = transaction.get(documentReference)
+                                val currentPost = snapshot.toObject(Post::class.java)
+
+
+                                currentPost?.let { post ->
+                                    val uid = FirebaseAuth.getInstance().currentUser?.uid
+                                    val likes = post.likes ?: hashMapOf()
+
+                                    if (likes.containsKey(uid)) {
+                                        // 좋아요 취소
+                                        post.likeCount -= 1
+                                        likes.remove(uid)
+                                        binding.likeImage.setImageResource(R.drawable.ic_favorite_border)
+                                        binding.likeNum.text = post.likeCount.toString()
+
                                     } else {
-                                        // 좋아요가 안 눌린 상태일 경우
-                                        dto.likeCount += 1
-                                        uid?.let { uid -> dto.likes?.set(uid!!, true) }
-                                        updateLikeImage = R.drawable.ic_favorite
+                                        // 좋아요 설정
+                                        post.likeCount += 1
+                                        uid?.let { likes[uid] = true }
+                                        binding.likeImage.setImageResource(R.drawable.ic_favorite)
+                                        binding.likeNum.text = post.likeCount.toString()
                                     }
-                                    newLikeCount = dto.likeCount
-                                    transaction.set(documentReference, dto)
+
+                                    post.likes = likes
+                                    transaction.set(documentReference, post)
                                 }
                             }?.addOnFailureListener { e ->
                                 Log.e("DetailActivity", "Error updating like", e)
@@ -207,22 +227,26 @@ private fun setupShareImageView() {
                         }
                     }
                     ?.addOnFailureListener { exception ->
-                        // 오류 처리
+                        Log.e("DetailActivity", "Firestore query failed", exception)
                     }
-            }
-
-            withContext(Dispatchers.Main) {
-                updateLikeImage?.let { binding.likeImage.setImageResource(it) }
-                newLikeCount?.let { binding.likeNum.text = it.toString() }
             }
         }
     }
+    private fun setupShareImageView() {
+        binding.shareImage.setOnClickListener {
+            val intent = Intent(Intent.ACTION_SEND_MULTIPLE)
+            intent.type = "text/plain"
 
+            val blogUrl = "https://tekken5953.tistory.com/"
+            val content = "친구가 링크를 공유했어요!\n어떤 링크인지 들어가서 확인해볼까요?"
+            intent.putExtra(Intent.EXTRA_TEXT,"$content\n\n$blogUrl")
 
-
-
-override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
+            val chooserTitle = "친구에게 공유하기"
+            startActivity(Intent.createChooser(intent, chooserTitle))
+        }
+    }
+    override fun onDestroy() {
+            super.onDestroy()
+            _binding = null
     }
 }

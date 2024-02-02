@@ -155,40 +155,42 @@ class CustomPagerAdapter1(val pageList:List<Page1>) : RecyclerView.Adapter<Custo
 }
 class CustomPagerAdapter2(val pageList:List<Page2>) : RecyclerView.Adapter<CustomPagerAdapter2.Holder>() {
     class Holder(val binding: HomeChallengeViewpagerBinding) : RecyclerView.ViewHolder(binding.root){
-        fun setItem(page: Page2) {
-            with(binding) {
-                from1.text = page.company
-                challengeTitle1.text = page.title
-                startTime1.text = page.time
-            }
-        }
+//        fun setItem(page: Page2) {
+//            with(binding) {
+//                from1.text = page.company
+//                challengeTitle1.text = page.title
+//                startTime1.text = page.time
+//            }
+//        }
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         val binding = HomeChallengeViewpagerBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        binding.challenge1.setOnClickListener {
-            Log.d("챌린지클릭", "Challenge 1 clicked")
-        }
-
-        binding.challenge2.setOnClickListener {
-            Log.d("챌린지클릭", "Challenge 2 clicked")
-        }
-
-        binding.challenge3.setOnClickListener {
-            Log.d("챌린지클릭", "Challenge 3 clicked")
-        }
-
-        binding.challenge4.setOnClickListener {
-            Log.d("챌린지클릭", "Challenge 4 clicked")
-        }
+//        binding.challenge1.setOnClickListener {
+//            Log.d("챌린지클릭", "Challenge 1 clicked")
+//        }
+//
+//        binding.challenge2.setOnClickListener {
+//            Log.d("챌린지클릭", "Challenge 2 clicked")
+//        }
+//
+//        binding.challenge3.setOnClickListener {
+//            Log.d("챌린지클릭", "Challenge 3 clicked")
+//        }
+//
+//        binding.challenge4.setOnClickListener {
+//            Log.d("챌린지클릭", "Challenge 4 clicked")
+//        }
 
         return Holder(binding)
     }
 
+    override fun onBindViewHolder(holder: Holder, position: Int) {
+
+    }
+
     override fun getItemCount(): Int = pageList.size
 
-    override fun onBindViewHolder(holder: Holder, position: Int) {
-        holder.setItem(pageList[position])
-    }
+
 }
 
 data class Page1(val content:String, val pageNum:Int)

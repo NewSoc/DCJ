@@ -30,4 +30,6 @@ class DetailActivityViewModel @Inject constructor(
         }
     }
 
+
+
 }
