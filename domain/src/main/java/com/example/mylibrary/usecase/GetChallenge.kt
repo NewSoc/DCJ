@@ -9,21 +9,13 @@ class GetChallenge @Inject constructor(
 
     suspend fun getExerciseChallenge()= mainRepository.getExerciseChallenge()
 
-    suspend fun getHobbyChallenge(){
+    suspend fun getHobbyChallenge() = mainRepository.getHobbyChallenge()
 
-    }
+    suspend fun getEatChallenge() = mainRepository.getEatChallenge()
 
-    suspend fun getEatChallenge(){
+    suspend fun getLifestyleChallenge()=  mainRepository.getLifestyleChallenge()
 
-    }
-
-    suspend fun getLifestyleChallenge(){
-
-    }
-
-    suspend fun getAllChallenge(){
-
-    }
+    suspend fun getAllChallenge() = mainRepository.getAllChallenge()
 
     suspend fun execute() = mainRepository.getRecentPost()
 }
